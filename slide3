@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Platform Engineering Value Pool</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            background: #f8fafc;
+            overflow: hidden;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .header {
+            background: linear-gradient(90deg, #0f172a 0%, #1e3a5f 100%);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            min-width: 0;
+        }
+        .logo {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+        .header-title {
+            color: white;
+            font-size: 22px;
+            font-weight: 600;
+            margin: 0;
+            white-space: nowrap;
+        }
+        .header-subtitle {
+            color: #94a3b8;
+            font-size: 13px;
+            margin: 0;
+            white-space: nowrap;
+        }
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 18px 30px;
+            gap: 12px;
+            min-height: 0;
+        }
+        .value-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+        .value-card {
+            background: white;
+            border-radius: 10px;
+            padding: 14px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-width: 0;
+            transition: all 0.2s ease;
+        }
+        .value-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .value-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+        .value-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .value-icon.blue {
+            background: #eff6ff;
+            color: #3b82f6;
+        }
+        .value-icon.green {
+            background: #f0fdf4;
+            color: #10b981;
+        }
+        .value-icon.purple {
+            background: #faf5ff;
+            color: #a855f7;
+        }
+        .value-icon.orange {
+            background: #fff7ed;
+            color: #f97316;
+        }
+        .value-icon.red {
+            background: #fef2f2;
+            color: #ef4444;
+        }
+        .value-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #1e3a5f;
+            margin: 0;
+            line-height: 1.2;
+        }
+        .value-metric {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 4px;
+        }
+        .metric-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1e3a5f;
+            margin: 0;
+        }
+        .metric-unit {
+            font-size: 11px;
+            color: #64748b;
+            margin: 0;
+        }
+        .value-desc {
+            font-size: 11px;
+            color: #64748b;
+            line-height: 1.3;
+            margin: 0;
+        }
+        .market-callout {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            border-radius: 10px;
+            padding: 12px 15px;
+            border: 1px solid #3b82f6;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 8px;
+        }
+        .market-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .market-icon {
+            width: 40px;
+            height: 40px;
+            background: #3b82f6;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+        }
+        .market-text {
+            flex: 1;
+        }
+        .market-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1e3a5f;
+            margin: 0;
+        }
+        .market-subtitle {
+            font-size: 12px;
+            color: #64748b;
+            margin: 0;
+        }
+        .market-right {
+            text-align: right;
+        }
+        .market-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e3a5f;
+            margin: 0;
+        }
+        .market-label {
+            font-size: 11px;
+            color: #64748b;
+            margin: 0;
+        }
+        .footer {
+            background: #f1f5f9;
+            padding: 10px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            color: #64748b;
+            margin-top: auto;
+        }
+        .source-tag {
+            background: #e2e8f0;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+        }
+        .trend-indicator {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 12px;
+            color: #10b981;
+        }
+        .trend-indicator i {
+            font-size: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<div class="header">
+<div class="header-left">
+<div class="logo">PE</div>
+<div>
+<div class="header-title">Five Value Drivers Creating a $50B+ Addressable Market for Platform Services</div>
+<div class="header-subtitle">Strategic analysis of enterprise value creation through platform engineering</div>
+</div>
+</div>
+<div class="header-right">
+<div style="color: #94a3b8; font-size: 12px;">April 10, 2026</div>
+<div style="color: #94a3b8; font-size: 11px;">Value Analysis</div>
+</div>
+</div>
+<div class="main-content">
+<div class="value-grid">
+<div class="value-card">
+<div class="value-header">
+<div class="value-icon blue">
+<i class="fas fa-brain"></i>
+</div>
+<div class="value-title">Reduced Cognitive Load</div>
+</div>
+<div class="value-metric">
+<div class="metric-value">+5%</div>
+<div class="metric-unit">productivity</div>
+</div>
+<div class="value-desc">Developer independence through self-service golden paths (DORA 2025)</div>
+</div>
+<div class="value-card">
+<div class="value-header">
+<div class="value-icon green">
+<i class="fas fa-rocket"></i>
+</div>
+<div class="value-title">Faster Time-to-Market</div>
+</div>
+<div class="value-metric">
+<div class="metric-value">3→0.25</div>
+<div class="metric-unit">weeks</div>
+</div>
+<div class="value-desc">Deployment time reduced from 3 weeks to 15 minutes (Thoughtworks 2025)</div>
+</div>
+<div class="value-card">
+<div class="value-header">
+<div class="value-icon purple">
+<i class="fas fa-dollar-sign"></i>
+</div>
+<div class="value-title">Cost Optimization</div>
+</div>
+<div class="value-metric">
+<div class="metric-value">47%</div>
+<div class="metric-unit">vs 38%</div>
+</div>
+<div class="value-desc">Innovation time with co-managed platforms (Google Cloud + ESG 2025)</div>
+</div>
+<div class="value-card">
+<div class="value-header">
+<div class="value-icon orange">
+<i class="fas fa-shield-alt"></i>
+</div>
+<div class="value-title">Security by Default</div>
+</div>
+<div class="value-metric">
+<div class="metric-value">-87%</div>
+<div class="metric-unit">MTTR</div>
+</div>
+<div class="value-desc">Mean time to recovery with automated guardrails</div>
+</div>
+<div class="value-card">
+<div class="value-header">
+<div class="value-icon red">
+<i class="fas fa-robot"></i>
+</div>
+<div class="value-title">AI Readiness</div>
+</div>
+<div class="value-metric">
+<div class="metric-value">86%</div>
+<div class="metric-unit">essential</div>
+</div>
+<div class="value-desc">Say PE is essential to realize AI value (Google Cloud + ESG 2025)</div>
+</div>
+</div>
+<div class="market-callout">
+<div class="market-left">
+<div class="market-icon">
+<i class="fas fa-chart-line"></i>
+</div>
+<div class="market-text">
+<div class="market-title">$50B+ Global Market Opportunity</div>
+<div class="market-subtitle">Across managed platform services, implementation/migration, and co-managed operations</div>
+</div>
+</div>
+<div class="market-right">
+<div class="market-value">$50B+</div>
+<div class="market-label">TAM (2026)</div>
+</div>
+</div>
+<div style="display: flex; gap: 15px; margin-top: 10px;">
+<div style="flex: 1; background: white; border-radius: 8px; padding: 12px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); border: 1px solid #e2e8f0;">
+<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+<i class="fas fa-lightbulb" style="color: #3b82f6;"></i>
+<div style="font-size: 13px; font-weight: 600; color: #1e3a5f;">Key Insight</div>
+</div>
+<div style="font-size: 12px; color: #64748b; line-height: 1.4;">
+                            Platform engineering creates a <span style="color: #3b82f6; font-weight: 600;">multiplier effect</span> across all five value drivers, 
+                            with organizations seeing <span style="color: #10b981; font-weight: 600;">20-40% improvement</span> in developer productivity 
+                            within 6 months of implementation.
+                        </div>
+</div>
+<div style="flex: 1; background: white; border-radius: 8px; padding: 12px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); border: 1px solid #e2e8f0;">
+<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+<i class="fas fa-chart-bar" style="color: #10b981;"></i>
+<div style="font-size: 13px; font-weight: 600; color: #1e3a5f;">ROI Projection</div>
+</div>
+<div style="font-size: 12px; color: #64748b; line-height: 1.4;">
+                            Enterprises can expect <span style="color: #3b82f6; font-weight: 600;">3-5x ROI</span> within 18 months 
+                            through reduced cloud costs, faster delivery, and improved developer retention.
+                        </div>
+</div>
+</div>
+</div>
+<div class="footer">
+<div style="display: flex; align-items: center; gap: 15px;">
+<span>Source: Google Cloud + ESG (2025), DORA 2025, CNCF Platforms Whitepaper, Thoughtworks (2025)</span>
+<span class="source-tag">Research</span>
+</div>
+<div style="display: flex; align-items: center; gap: 15px;">
+<span>Page 3 of 11</span>
+<span>Platform Engineering Extension</span>
+</div>
+</div>
+</div>
+</body>
+</html>
